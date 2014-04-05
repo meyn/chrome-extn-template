@@ -1,9 +1,19 @@
 "use strict"
 
-chrome.runtime.onInstalled.addListener(function(details) {
-	console.log("onInstalled()", details);
+require([
+	"js/main"
+],
+function(MyExtn) {
+	MyExtn.main();
+	console.log("version", MyExtn.getVersion());
 });
 
-chrome.runtime.onStartup.addListener(function() {
-	console.log("onStartup()");
+
+// These 2 have to be out here else they aren't called
+chrome.runtime.onInstalled.addListener(function onInstalledHandler(details) {
+	console.log("[onInstalledHandler]", details);
+});
+
+chrome.runtime.onStartup.addListener(function onStartupHandler() {
+	console.log("[onStartupHandler]");
 });

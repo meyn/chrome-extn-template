@@ -1,0 +1,16 @@
+{
+	"extn_description": {
+		"message": "My new extension's description",
+		"description": "extension description"
+	},
+
+	"extn_name": {
+		"message": "My new extension",
+		"description": "extension name"
+	},
+
+	"extn_title": {
+		"message": "My new extension",
+		"description": "extension title"
+	}
+}

@@ -20,7 +20,7 @@
   },
   
   "background": {
-    "scripts": [ "js/libs/require.js", "js/eventPage.js" ],
+    "page" : "html/background.html",
     "persistent": false
   },
   

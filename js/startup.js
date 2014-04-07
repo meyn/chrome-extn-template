@@ -1,15 +1,6 @@
 "use strict"
 
-require([
-	"js/main"
-],
-function(MyExtn) {
-	MyExtn.main();
-	console.log("version", MyExtn.getVersion());
-});
-
-
-// These 2 have to be out here else they aren't called
+// These 2 have to be here else they aren't called from inside a module
 chrome.runtime.onInstalled.addListener(function onInstalledHandler(details) {
 	console.log("[onInstalledHandler]", details);
 });

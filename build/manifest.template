@@ -1,0 +1,39 @@
+{
+  "all": {
+    "manifest_version": 2,
+
+    "name": "__MSG_extn_name__",
+    "short_name": "__MSG_extn_name__",
+    "version": "0.0.0",
+
+    "default_locale": "en",
+    "description": "__MSG_extn_description__",
+
+    "icons": {
+      "16": "img/icon16.png",
+      "48": "img/icon48.png",
+      "128": "img/icon128.png"
+    },
+
+    "browser_action": {
+      "default_icon": "img/icon19.png",
+      "default_popup": "html/popup.html"
+    },
+    
+    "background": {
+      "page" : "html/background.html",
+      "persistent": false
+    },
+    
+    "minimum_chrome_version": "30",
+
+    "permissions": []
+  },
+
+  "development": {
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  },
+
+  "release": {
+  }
+}

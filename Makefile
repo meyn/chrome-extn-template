@@ -1,18 +1,52 @@
+# commands
 ZIP := zip
-ZIPFILE := MyExtn.zip
+SYMLINK := ln -sfn
+COPY := cp
+NODEJS := node
+DEL := rm
 
-.PHONY:	all background popup zip clean
+BUILD_SCRIPTS_DIR := ./build
+BUILD_OP_DIR := ./built
+JS_DIR := ./js
 
-all: zip
+RJS_OPTIMIZE_SCRIPT := ./dev/libs/r.js
+MAKE_MANIFEST_SCRIPT := $(BUILD_SCRIPTS_DIR)/MakeManifest.js
+CHROME_MANIFEST_FILE := manifest.json
 
-background:
-	node ./js/libs/r.js -o name=main out=./js/main-built.js baseUrl=./js
+ZIPFILE := $(addsuffix .zip, $(notdir $(CURDIR)))
+PKG_EXCLUDES := Makefile "tests/*" "build/*" "dev/*" "$(BUILD_OP_DIR)/*" js/build.txt
 
-popup:
-	node ./js/libs/r.js -o name=popup out=./js/popup-built.js baseUrl=./js
+.PHONY:	dev major minor patch minify major-manifest minor-manifest patch-manifest rel pkg clean
+
+dev:
+	$(NODEJS) $(MAKE_MANIFEST_SCRIPT) dev
+	$(COPY) $(BUILD_SCRIPTS_DIR)/$(CHROME_MANIFEST_FILE) $(CHROME_MANIFEST_FILE)
+	$(SYMLINK) ./dev $(JS_DIR)
+
+major: clean major-manifest minify pkg
+
+minor: clean minor-manifest minify pkg
+
+patch: clean patch-manifest minify pkg
+
+minify:
+	$(NODEJS) $(RJS_OPTIMIZE_SCRIPT) -o $(BUILD_SCRIPTS_DIR)/build.js
+
+major-manifest:
+	$(NODEJS) $(MAKE_MANIFEST_SCRIPT) rel major
+	$(COPY) $(BUILD_SCRIPTS_DIR)/$(CHROME_MANIFEST_FILE) $(CHROME_MANIFEST_FILE)
+
+minor-manifest:
+	$(NODEJS) $(MAKE_MANIFEST_SCRIPT) rel minor
+	$(COPY) $(BUILD_SCRIPTS_DIR)/$(CHROME_MANIFEST_FILE) $(CHROME_MANIFEST_FILE)
+
+patch-manifest:
+	$(NODEJS) $(MAKE_MANIFEST_SCRIPT) rel patch
+	$(COPY) $(BUILD_SCRIPTS_DIR)/$(CHROME_MANIFEST_FILE) $(CHROME_MANIFEST_FILE)
+
+pkg:
+	$(SYMLINK) $(BUILD_OP_DIR) $(JS_DIR)
+	$(ZIP) $(ZIPFILE) -9 -r * -x $(PKG_EXCLUDES)
 
 clean:
-	@rm $(ZIPFILE) ./js/popup-built.js ./js/main-built.js
-
-zip:
-	$(ZIP) $(ZIPFILE) -9 -r * -x Makefile js/libs/r.js
+	@$(DEL) -rf $(ZIPFILE) $(JS_DIR) $(BUILD_OP_DIR) $(CHROME_MANIFEST_FILE)

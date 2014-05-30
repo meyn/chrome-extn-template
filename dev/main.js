@@ -5,6 +5,13 @@ require([
 	"module1"
 ],
 function(App, Module1) {
+
 	console.log('App ', App.getName(), App.getShortName(), App.getVersion());
-	Module1.init();
+
+	(function init() {
+		console.log('[main] init');
+		chrome.windows.onCreated.addListener(Module1.windowCreatedHandler);
+		Module1.init();
+	})();
+
 });
